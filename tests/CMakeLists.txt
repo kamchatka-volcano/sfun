@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.18)
+project(test_sfun)
+
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
+include(CheckPIESupported)
+check_pie_supported()
+
+set(SRC test_string.cpp)
+
+add_executable(test_sfun ${SRC})
+target_compile_features(test_sfun PUBLIC cxx_std_11)
+set_target_properties(test_sfun PROPERTIES CXX_EXTENSIONS OFF POSITION_INDEPENDENT_CODE OFF)
+
+add_test(NAME test_sfun COMMAND test_sfun)
+target_include_directories(test_sfun PRIVATE ../include)
+target_link_libraries(test_sfun PRIVATE ${GTEST_BOTH_LIBRARIES} Threads::Threads)
