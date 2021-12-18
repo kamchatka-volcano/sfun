@@ -1,41 +1,38 @@
 #pragma once
-#include <string>
+#include <string_view>
 #include <vector>
 #include <algorithm>
 
 namespace sfun{
 namespace string_utils{
 
-template <typename TStr>
-std::string trimFront(TStr&& str)
+inline std::string trimFront(std::string_view str)
 {
-    auto res = std::string{std::forward<TStr>(str)};
-    res.erase(res.begin(), std::find_if(res.begin(), res.end(), [](int ch) {
+    auto it = std::find_if(str.begin(), str.end(), [](int ch) {
         return !std::isspace(ch);
-    }));
-    return res;
+    });
+    auto firstNotBlank = std::distance(str.begin(), it);
+    return std::string{str.substr(firstNotBlank)};
 }
 
-template <typename TStr>
-std::string trimBack(TStr&& str)
+inline std::string trimBack(std::string_view str)
 {
-    auto res = std::string{std::forward<TStr>(str)};
-    res.erase(std::find_if(res.rbegin(), res.rend(), [](int ch) {
+    auto it = std::find_if(str.rbegin(), str.rend(), [](int ch) {
         return !std::isspace(ch);
-    }).base(), res.end());
-    return res;
+    }).base();
+    auto lastNotBlank = std::distance(str.begin(), it);
+    return std::string{str.substr(0, lastNotBlank)};
 }
 
-template <typename TStr>
-std::string trim(TStr&& str)
+inline std::string trim(std::string_view str)
 {
-    return trimBack(trimFront(std::forward<TStr>(str)));
+    return trimBack(trimFront(str));
 }
 
-inline std::vector<std::string> split(const std::string& str, const std::string& delim = " ", bool trimmed = true)
+inline std::vector<std::string> split(std::string_view str, std::string_view delim = " ", bool trimmed = true)
 {
     if (delim.empty() || str.empty())
-        return std::vector<std::string>{str};
+        return std::vector<std::string>{std::string{str}};
 
     auto result = std::vector<std::string>{};
     auto delimPos = std::size_t{0};
@@ -48,35 +45,33 @@ inline std::vector<std::string> split(const std::string& str, const std::string&
         if (trimmed)
             part = trim(part);
         if (!part.empty())
-            result.push_back(part);
+            result.emplace_back(std::string{part});
         delimPos += delim.size();
         pos = delimPos;
     }
     return result;
 }
 
-template <typename TStr>
-std::string replace(TStr&& str, const std::string& subStr, const std::string& val)
+inline std::string replace(std::string str, std::string_view subStr, std::string_view val)
 {
-    auto res = std::string{std::forward<TStr>(str)};
     if (subStr.empty())
-        return res;
+        return str;
 
-    auto pos = res.find(subStr);
+    auto pos = str.find(subStr);
     while (pos != std::string::npos){
-        res.replace(pos, subStr.size(), val);
-        pos = res.find(subStr, pos + val.size());
+        str.replace(pos, subStr.size(), val);
+        pos = str.find(subStr, pos + val.size());
     }
-    return res;
+    return str;
 }
 
-inline bool startsWith(const std::string& str, const std::string& val)
+inline bool startsWith(std::string_view str, std::string_view val)
 {
     auto res = str.find(val);
     return res == 0;
 }
 
-inline bool endsWith(const std::string& str, const std::string& val)
+inline bool endsWith(std::string_view str, std::string_view val)
 {
     if (val.empty())
         return true;
@@ -86,23 +81,23 @@ inline bool endsWith(const std::string& str, const std::string& val)
     return std::distance(res, str.end()) == static_cast<int>(val.size());
 }
 
-inline std::string before(const std::string& str, const std::string& val)
+inline std::string before(std::string_view str, std::string_view val)
 {
     auto res = str.find(val);
     if (res == std::string::npos)
-        return str;
+        return std::string{str};
     return std::string{str.begin(), str.begin() + static_cast<int>(res)};
 }
 
-inline std::string after(const std::string& str, const std::string& val)
+inline std::string after(std::string_view str, std::string_view val)
 {
     auto res = str.find(val);
     if (res == std::string::npos)
-        return {""};
+        return {};
     return std::string{str.begin() + static_cast<int>(res + val.size()), str.end()};
 }
 
-inline std::string between(const std::string& str, const std::string& afterStr, const std::string& beforeStr)
+inline std::string between(std::string_view str, std::string_view afterStr, std::string_view beforeStr)
 {
     return before(after(str, afterStr), beforeStr);
 }

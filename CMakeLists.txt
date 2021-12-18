@@ -11,7 +11,7 @@ endif()
 project(sfun DESCRIPTION "stuff from unnamed namespaces")
 
 add_library(sfun INTERFACE)
-target_compile_features(sfun INTERFACE cxx_std_11)
+target_compile_features(sfun INTERFACE cxx_std_17)
 target_include_directories(
         sfun
         INTERFACE

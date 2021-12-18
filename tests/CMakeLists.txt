@@ -13,7 +13,7 @@ check_pie_supported()
 set(SRC test_string.cpp)
 
 add_executable(test_sfun ${SRC})
-target_compile_features(test_sfun PUBLIC cxx_std_11)
+target_compile_features(test_sfun PUBLIC cxx_std_17)
 set_target_properties(test_sfun PROPERTIES CXX_EXTENSIONS OFF POSITION_INDEPENDENT_CODE OFF)
 
 add_test(NAME test_sfun COMMAND test_sfun)
