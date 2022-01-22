@@ -15,10 +15,13 @@ FetchContent_Declare(sfun
     GIT_REPOSITORY "https://github.com/kamchatka-volcano/sfun.git"
     GIT_TAG "origin/master"
 )
+
+#uncomment if you need to install sfun with your target
+#set(INSTALL_SFUN ON)
 FetchContent_MakeAvailable(sfun)
 
-add_executable(my_app)
-target_link_libraries(myapp PRIVATE sfun)
+add_executable(${CMAKE_PROJECT_NAME})
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sfun::sfun)
 ```
 
 For the system-wide installation use these commands:
@@ -29,6 +32,13 @@ cmake -S . -B build
 cmake --build build
 cmake --install build
 ```
+
+Afterwards, you can use find_package() command to make installed library available inside your project:
+```
+find_package(sfun 1.0 REQUIRED)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sfun::sfun)
+```
+
 
 ### Running tests
 ```
