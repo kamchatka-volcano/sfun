@@ -20,8 +20,8 @@ FetchContent_Declare(sfun
 #set(INSTALL_SFUN ON)
 FetchContent_MakeAvailable(sfun)
 
-add_executable(${CMAKE_PROJECT_NAME})
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sfun::sfun)
+add_executable(${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME} PRIVATE sfun::sfun)
 ```
 
 For the system-wide installation use these commands:
@@ -36,7 +36,7 @@ cmake --install build
 Afterwards, you can use find_package() command to make installed library available inside your project:
 ```
 find_package(sfun 1.0 REQUIRED)
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sfun::sfun)
+target_link_libraries(${PROJECT_NAME} PRIVATE sfun::sfun)
 ```
 
 
