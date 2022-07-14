@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(sfun VERSION 1.0 DESCRIPTION "stuff from unnamed namespaces - a c++17 helper library")
+project(sfun VERSION 1.1.0 DESCRIPTION "stuff from unnamed namespaces - a c++17 helper library")
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     set(SFUN_SUBPROJECT OFF)

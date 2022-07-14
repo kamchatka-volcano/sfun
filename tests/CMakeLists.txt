@@ -17,5 +17,4 @@ target_compile_features(test_sfun PUBLIC cxx_std_17)
 set_target_properties(test_sfun PROPERTIES CXX_EXTENSIONS OFF POSITION_INDEPENDENT_CODE OFF)
 
 add_test(NAME test_sfun COMMAND test_sfun)
-target_include_directories(test_sfun PRIVATE ../include)
-target_link_libraries(test_sfun PRIVATE ${GTEST_BOTH_LIBRARIES} Threads::Threads)
+target_link_libraries(test_sfun PRIVATE ${GTEST_BOTH_LIBRARIES} sfun::sfun Threads::Threads)
