@@ -39,19 +39,19 @@ TEST(String, Trim)
 TEST(String, Split)
 {
     EXPECT_EQ(split("hello world"),
-              (std::vector<std::string>{"hello", "world"}));
+              (std::vector<std::string_view>{"hello", "world"}));
     EXPECT_EQ(split("hello world", ","),
-              (std::vector<std::string>{"hello world"}));
+              (std::vector<std::string_view>{"hello world"}));
     EXPECT_EQ(split("hello world, nice weather", ","),
-              (std::vector<std::string>{"hello world", "nice weather"}));
+              (std::vector<std::string_view>{"hello world", "nice weather"}));
     EXPECT_EQ(split("hello world\n, nice weather", ",", false),
-              (std::vector<std::string>{"hello world\n", " nice weather"}));
+              (std::vector<std::string_view>{"hello world\n", " nice weather"}));
     EXPECT_EQ(split(""),
-              (std::vector<std::string>{""}));
+              (std::vector<std::string_view>{""}));
     EXPECT_EQ(split("hello world", ""),
-              (std::vector<std::string>{"hello world"}));
+              (std::vector<std::string_view>{"hello world"}));
     EXPECT_EQ(split("", ""),
-              (std::vector<std::string>{""}));
+              (std::vector<std::string_view>{""}));
 }
 
 TEST(String, Replace)
