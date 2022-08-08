@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(sfun VERSION 2.0.0 DESCRIPTION "stuff from unnamed namespaces - a c++17 helper library")
+project(sfun VERSION 2.1.0 DESCRIPTION "stuff from unnamed namespaces - a c++17 helper library")
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     set(SFUN_SUBPROJECT OFF)
@@ -19,8 +19,12 @@ target_include_directories(
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
-set_target_properties(sfun PROPERTIES PUBLIC_HEADER
-        "include/sfun/string_utils.h")
+
+set(PUBLIC_HEADERS
+    "include/sfun/string_utils.h"
+    "include/sfun/traits.h"
+)
+set_target_properties(sfun PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADERS}")
 
 option(ENABLE_TESTS "Enable tests" OFF)
 if (ENABLE_TESTS AND NOT SFUN_SUBPROJECT)

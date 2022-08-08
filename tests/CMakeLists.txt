@@ -10,7 +10,8 @@ find_package(Threads REQUIRED)
 include(CheckPIESupported)
 check_pie_supported()
 
-set(SRC test_string.cpp)
+set(SRC test_string.cpp
+        test_traits.cpp)
 
 add_executable(test_sfun ${SRC})
 target_compile_features(test_sfun PUBLIC cxx_std_17)
