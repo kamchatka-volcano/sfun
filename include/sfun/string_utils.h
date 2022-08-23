@@ -147,7 +147,7 @@ inline bool endsWith(std::string_view str, std::string_view val)
     auto res = std::find_end(str.begin(), str.end(), val.begin(), val.end());
     if (res == str.end())
         return false;
-    return std::distance(res, str.end()) == static_cast<int>(val.size());
+    return std::distance(res, str.end()) == static_cast<std::ptrdiff_t>(val.size());
 }
 
 inline std::string_view before(std::string_view str, std::string_view val)
@@ -155,7 +155,7 @@ inline std::string_view before(std::string_view str, std::string_view val)
     auto res = str.find(val);
     if (res == std::string_view::npos)
         return str;
-    return {str.begin(), res};
+    return {str.data(), res};
 }
 
 inline std::string_view after(std::string_view str, std::string_view val)
@@ -163,7 +163,7 @@ inline std::string_view after(std::string_view str, std::string_view val)
     auto res = str.find(val);
     if (res == std::string_view::npos)
         return {};
-    return {str.begin() + static_cast<int>(res + val.size()), str.size() - (res + val.size())};
+    return {std::next(str.data(), static_cast<std::ptrdiff_t>(res + val.size())), str.size() - (res + val.size())};
 }
 
 inline std::string_view between(std::string_view str, std::string_view afterStr, std::string_view beforeStr)
