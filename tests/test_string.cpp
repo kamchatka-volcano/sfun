@@ -65,6 +65,46 @@ TEST(String, Replace)
     EXPECT_EQ(replace("", "", ""), "");
 }
 
+TEST(String, Join)
+{
+    {
+        auto stringList = std::vector<std::string>{"a", "b", "c"};
+        EXPECT_EQ(join(stringList, ""), "abc");
+        EXPECT_EQ(join(stringList, ", "), "a, b, c");
+
+        stringList = {"a"};
+        EXPECT_EQ(join(stringList, ""), "a");
+        EXPECT_EQ(join(stringList, ", "), "a");
+
+        stringList = {};
+        EXPECT_EQ(join(stringList, ""), "");
+        EXPECT_EQ(join(stringList, ", "), "");
+    }
+    {
+        auto viewList = std::vector<std::string_view>{"a", "b" , "c"};
+        EXPECT_EQ(join(viewList, ""), "abc");
+        EXPECT_EQ(join(viewList, ", "), "a, b, c");
+
+        viewList = {"a"};
+        EXPECT_EQ(join(viewList, ""), "a");
+        EXPECT_EQ(join(viewList, ", "), "a");
+
+        viewList = {};
+        EXPECT_EQ(join(viewList, ""), "");
+        EXPECT_EQ(join(viewList, ", "), "");
+    }
+    {
+        EXPECT_EQ(join(std::vector<std::string>{"a", "b", "c"}, ""), "abc");
+        EXPECT_EQ(join(std::vector<std::string>{"a", "b", "c"}, ", "), "a, b, c");
+
+        EXPECT_EQ(join(std::vector<std::string>{"a"}, ""), "a");
+        EXPECT_EQ(join(std::vector<std::string>{"a"}, ", "), "a");
+
+        EXPECT_EQ(join(std::vector<std::string>{}, ""), "");
+        EXPECT_EQ(join(std::vector<std::string>{}, ", "), "");
+    }
+}
+
 TEST(String, StartsWith)
 {
     EXPECT_TRUE(startsWith("hello world", "hell"));

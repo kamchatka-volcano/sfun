@@ -134,6 +134,32 @@ inline std::string replace(std::string str, std::string_view subStr, std::string
     return str;
 }
 
+template<typename TRange>
+std::string join(const TRange& range, std::string_view separator)
+{
+    static_assert(std::is_constructible_v<std::string, decltype(*std::begin(range))>);
+
+    const auto size = [&] {
+        auto res = std::size_t{};
+        std::for_each(std::begin(range), std::end(range), [&res](const auto& val) {
+            res += std::size(val);
+        });
+        if (std::size(range) > 0)
+            res += (std::size(range) - 1) * separator.size();
+        return res;
+    }();
+
+    auto res = std::string{};
+    res.reserve(size);
+    std::for_each(std::begin(range), std::end(range), [&](const auto& val){
+        res += std::string{val};
+        res += std::string{separator};
+    });
+    if (!res.empty())
+        res.resize(res.size() - separator.size());
+    return res;
+}
+
 inline bool startsWith(std::string_view str, std::string_view val)
 {
     auto res = str.find(val);
