@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFUN_ASSERTS_H
+#define SFUN_ASSERTS_H
+
 #include <exception>
 
 namespace sfun::assert{
@@ -10,3 +12,5 @@ inline void ensureNotReachable() noexcept
 }
 
 }
+
+#endif //SFUN_ASSERTS_H
