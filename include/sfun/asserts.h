@@ -2,6 +2,7 @@
 #define SFUN_ASSERTS_H
 
 #include <exception>
+#include "assert_macros.h"
 
 namespace sfun::assert{
 
