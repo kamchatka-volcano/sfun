@@ -10,61 +10,61 @@ namespace sfun::string_utils{
 
 inline bool isalnum(char ch)
 {
-    return std::isalnum(static_cast<unsigned char>(ch));
+    return std::isalnum(static_cast<unsigned char>(ch)) != 0;
 }
 
 inline bool isalpha(char ch)
 {
-    return std::isalpha(static_cast<unsigned char>(ch));
+    return std::isalpha(static_cast<unsigned char>(ch)) != 0;
 }
 
 inline bool isblank(char ch)
 {
-    return std::isblank(static_cast<unsigned char>(ch));
+    return std::isblank(static_cast<unsigned char>(ch)) != 0;
 }
 
 inline bool iscntrl(char ch)
 {
-    return std::iscntrl(static_cast<unsigned char>(ch));
+    return std::iscntrl(static_cast<unsigned char>(ch)) != 0;
 }
 inline bool isdigit(char ch)
 {
-    return std::isdigit(static_cast<unsigned char>(ch));
+    return std::isdigit(static_cast<unsigned char>(ch)) != 0;
 }
 
 inline bool isgraph(char ch)
 {
-    return std::isgraph(static_cast<unsigned char>(ch));
+    return std::isgraph(static_cast<unsigned char>(ch)) != 0;
 }
 
 inline bool islower(char ch)
 {
-    return std::islower(static_cast<unsigned char>(ch));
+    return std::islower(static_cast<unsigned char>(ch)) != 0;
 }
 
 inline bool isprint(char ch)
 {
-    return std::isprint(static_cast<unsigned char>(ch));
+    return std::isprint(static_cast<unsigned char>(ch)) != 0;
 }
 
 inline bool ispunct(char ch)
 {
-    return std::ispunct(static_cast<unsigned char>(ch));
+    return std::ispunct(static_cast<unsigned char>(ch)) != 0;
 }
 
 inline bool isspace(char ch)
 {
-    return std::isspace(static_cast<unsigned char>(ch));
+    return std::isspace(static_cast<unsigned char>(ch)) != 0;
 }
 
 inline bool isupper(char ch)
 {
-    return std::isupper(static_cast<unsigned char>(ch));
+    return std::isupper(static_cast<unsigned char>(ch)) != 0;
 }
 
 inline bool isxdigit(char ch)
 {
-    return std::isxdigit(static_cast<unsigned char>(ch));
+    return std::isxdigit(static_cast<unsigned char>(ch)) != 0;
 }
 
 inline char tolower(char ch)

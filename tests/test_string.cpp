@@ -153,3 +153,56 @@ TEST(String, Between)
     EXPECT_EQ(between("", "moon", ""), "");
     EXPECT_EQ(between("", "", ""), "");
 }
+
+TEST(String, cctypeWrappers)
+{
+    EXPECT_TRUE(isalnum('9'));
+    EXPECT_TRUE(isalnum('z'));
+    EXPECT_FALSE(isalnum('!'));
+
+    EXPECT_TRUE(isalpha('a'));
+    EXPECT_FALSE(isalpha('9'));
+
+    EXPECT_TRUE(isblank(' '));
+    EXPECT_FALSE(isblank('9'));
+
+    EXPECT_TRUE(iscntrl(0x7F));
+    EXPECT_FALSE(iscntrl('9'));
+
+    EXPECT_TRUE(isdigit('9'));
+    EXPECT_FALSE(isdigit('a'));
+
+    EXPECT_TRUE(isgraph('!'));
+    EXPECT_TRUE(isgraph('9'));
+    EXPECT_FALSE(isgraph(' '));
+    EXPECT_FALSE(isgraph(0x7F));
+
+    EXPECT_TRUE(islower('a'));
+    EXPECT_FALSE(islower('A'));
+
+    EXPECT_TRUE(isprint('!'));
+    EXPECT_TRUE(isprint('9'));
+    EXPECT_TRUE(isprint(' '));
+    EXPECT_FALSE(isprint(0x7F));
+
+    EXPECT_TRUE(ispunct(','));
+    EXPECT_FALSE(ispunct('A'));
+
+    EXPECT_TRUE(isspace(' '));
+    EXPECT_FALSE(isspace('A'));
+
+    EXPECT_TRUE(isupper('A'));
+    EXPECT_FALSE(isupper('a'));
+
+    EXPECT_TRUE(isxdigit('9'));
+    EXPECT_TRUE(isxdigit('A'));
+    EXPECT_FALSE(isxdigit('U'));
+
+    EXPECT_EQ(tolower('a'), 'a');
+    EXPECT_EQ(tolower('A'), 'a');
+    EXPECT_NE(tolower('Z'), 'a');
+
+    EXPECT_EQ(toupper('a'), 'A');
+    EXPECT_EQ(toupper('A'), 'A');
+    EXPECT_NE(toupper('z'), 'z');
+}
