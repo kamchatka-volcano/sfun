@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFUN_STRING_UTILS_H
+#define SFUN_STRING_UTILS_H
+
 #include <string_view>
 #include <vector>
 #include <algorithm>
@@ -197,3 +199,5 @@ inline std::string_view between(std::string_view str, std::string_view afterStr,
     return before(after(str, afterStr), beforeStr);
 }
 }
+
+#endif //SFUN_STRING_UTILS_H

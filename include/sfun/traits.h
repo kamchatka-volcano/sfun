@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFUN_TRAITS_H
+#define SFUN_TRAITS_H
+
 #include <type_traits>
 #include <optional>
 
@@ -60,3 +62,5 @@ template <typename T>
 inline constexpr auto dependent_false = false;
 
 }
+
+#endif //SFUN_TRAITS_H
