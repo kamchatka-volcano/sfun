@@ -37,7 +37,7 @@ jobs:
             os: windows-latest,
             cc: "cl",
             cxx: "cl",
-            flags: "/EHsc /Wall /WX /wd5045"
+            flags: "/EHsc /W4 /WX"
           }
 
     steps:
