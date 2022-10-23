@@ -9,8 +9,7 @@ namespace sfun::assert{
 [[noreturn]]
 inline void ensureNotReachable() noexcept
 {
-    using mustNotBeInvoked = std::false_type;
-    sfunPrecondition(mustNotBeInvoked{});
+    std::terminate();
 }
 
 }
