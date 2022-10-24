@@ -1,4 +1,5 @@
 ## sfun
+[![build & test (clang, gcc, MSVC)](https://github.com/kamchatka-volcano/sfun/actions/workflows/build_and_test.yml/badge.svg?branch=master)](https://github.com/kamchatka-volcano/sfun/actions/workflows/build_and_test.yml)
 
 **sfun** - is a small header-only library for utility functions that are so small and simple that you define them near the caller and forget to test them.
 
