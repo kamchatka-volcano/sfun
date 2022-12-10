@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
-#include <sfun/traits.h>
+#include <sfun/type_traits.h>
 #include <array>
 #include <vector>
 #include <list>
 #include <map>
 #include <unordered_map>
 
-using namespace sfun::traits;
+using namespace sfun;
 
 struct Foo{};
 

@@ -1,10 +1,10 @@
-#ifndef SFUN_TRAITS_H
-#define SFUN_TRAITS_H
+#ifndef SFUN_TYPE_TRAITS_H
+#define SFUN_TYPE_TRAITS_H
 
 #include <type_traits>
 #include <optional>
 
-namespace sfun::traits {
+namespace sfun{
 
 template<typename T, typename = void>
 struct is_optional : std::false_type {};
@@ -58,9 +58,6 @@ struct is_associative_container<T,
 template <typename T>
 inline constexpr auto is_associative_container_v = is_associative_container<T>::value;
 
-template <typename T>
-inline constexpr auto dependent_false = false;
-
 }
 
-#endif //SFUN_TRAITS_H
+#endif //SFUN_TYPE_TRAITS_H
