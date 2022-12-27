@@ -3,8 +3,10 @@ project(test_sfun)
 
 SealLake_GoogleTest(
         SOURCES
-            test_string.cpp
-            test_traits.cpp
+        test_string.cpp
+        test_traits.cpp
+        test_type_list.cpp
+        test_functional.cpp
         LIBRARIES
-            sfun::sfun
+        sfun::sfun
 )

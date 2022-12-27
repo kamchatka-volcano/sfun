@@ -1,10 +1,12 @@
-#pragma once
+#ifndef SFUN_INTERFACE_H
+#define SFUN_INTERFACE_H
+
 #include <type_traits>
 
-namespace sfun{
+namespace sfun {
 
-template<typename T>
-class Interface{
+template <typename T>
+class Interface {
 public:
     Interface()
     {
@@ -18,4 +20,6 @@ public:
     Interface& operator=(Interface&&) = delete;
 };
 
-}
+} // namespace sfun
+
+#endif // SFUN_INTERFACE_H
