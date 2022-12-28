@@ -66,16 +66,19 @@ struct type_identity {
 template <typename T>
 using type_identity_t = typename type_identity<T>::type;
 
-template <typename T>
-using to_type = typename T::type;
+template <typename T, typename... Args>
+struct to_tuple {};
 
-namespace detail {
-template <typename... T>
-constexpr auto decayTuple(std::tuple<T...> const&) -> std::tuple<std::decay_t<T>...>;
-}
+template <typename T, typename... Args>
+struct decay_tuple {};
+
+template <typename... Args>
+struct decay_tuple<std::tuple<Args...>> {
+    using type = std::tuple<std::decay_t<Args>...>;
+};
 
 template <typename T>
-using decay_tuple_t = decltype(detail::decayTuple(std::declval<T>()));
+using decay_tuple_t = typename decay_tuple<T>::type;
 
 } // namespace sfun
 

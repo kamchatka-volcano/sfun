@@ -7,6 +7,7 @@ SealLake_GoogleTest(
         test_traits.cpp
         test_type_list.cpp
         test_functional.cpp
+        test_utility.cpp
         LIBRARIES
         sfun::sfun
 )
