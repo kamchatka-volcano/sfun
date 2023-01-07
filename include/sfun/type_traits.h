@@ -1,53 +1,57 @@
 #ifndef SFUN_TYPE_TRAITS_H
 #define SFUN_TYPE_TRAITS_H
 
-#include <type_traits>
 #include <optional>
+#include <tuple>
+#include <type_traits>
 
-namespace sfun{
+namespace sfun {
 
-template<typename T, typename = void>
+template <typename T, typename = void>
 struct is_optional : std::false_type {};
 
-template<typename T>
+template <typename T>
 struct is_optional<std::optional<T>> : std::true_type {};
 
 template <typename T>
 inline constexpr auto is_optional_v = is_optional<T>::value;
 
-template<typename T, typename = void>
-struct remove_optional{
+template <typename T, typename = void>
+struct remove_optional {
     using type = T;
 };
 
-template<typename T>
-struct remove_optional<std::optional<T>>{
+template <typename T>
+struct remove_optional<std::optional<T>> {
     using type = T;
 };
 
-template<typename T>
+template <typename T>
 using remove_optional_t = typename remove_optional<T>::type;
 
 template <typename, typename = void>
-struct is_dynamic_sequence_container : std::false_type{};
+struct is_dynamic_sequence_container : std::false_type {};
 
 template <typename T>
-struct is_dynamic_sequence_container<T,
-    std::void_t< typename T::value_type,
-                 decltype(std::declval<T>().begin()),
-                 decltype(std::declval<T>().end()),
-                 decltype(std::declval<T>().emplace_back(std::declval<typename T::value_type>()))>
-> : std::true_type{};
+struct is_dynamic_sequence_container<
+        T,
+        std::void_t<
+                typename T::value_type,
+                decltype(std::declval<T>().begin()),
+                decltype(std::declval<T>().end()),
+                decltype(std::declval<T>().emplace_back(std::declval<typename T::value_type>()))>> : std::true_type {};
 
 template <typename T>
 inline constexpr auto is_dynamic_sequence_container_v = is_dynamic_sequence_container<T>::value;
 
 template <typename, typename = void>
-struct is_associative_container : std::false_type{};
+struct is_associative_container : std::false_type {};
 
 template <typename T>
-struct is_associative_container<T,
-        std::void_t<typename T::key_type,
+struct is_associative_container<
+        T,
+        std::void_t<
+                typename T::key_type,
                 typename T::mapped_type,
                 decltype(std::declval<T>().begin()),
                 decltype(std::declval<T>().end()),
@@ -82,4 +86,4 @@ using decay_tuple_t = typename decay_tuple<T>::type;
 
 } // namespace sfun
 
-#endif //SFUN_TYPE_TRAITS_H
+#endif // SFUN_TYPE_TRAITS_H
