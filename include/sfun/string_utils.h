@@ -1,12 +1,13 @@
 #ifndef SFUN_STRING_UTILS_H
 #define SFUN_STRING_UTILS_H
 
-#include <string_view>
-#include <vector>
 #include <algorithm>
 #include <cctype>
+#include <string>
+#include <string_view>
+#include <vector>
 
-namespace sfun{
+namespace sfun {
 
 inline bool isalnum(char ch)
 {
@@ -79,18 +80,27 @@ inline char toupper(char ch)
 
 inline std::string_view trimFront(std::string_view str)
 {
-    auto it = std::find_if(str.begin(), str.end(), [](char ch){
-        return !sfun::isspace(ch);
-    });
+    auto it = std::find_if(
+            str.begin(),
+            str.end(),
+            [](char ch)
+            {
+                return !sfun::isspace(ch);
+            });
     auto firstNotBlank = std::distance(str.begin(), it);
     return str.substr(static_cast<std::size_t>(firstNotBlank));
 }
 
 inline std::string_view trimBack(std::string_view str)
 {
-    auto it = std::find_if(str.rbegin(), str.rend(), [](char ch){
-        return !sfun::isspace(ch);
-    }).base();
+    auto it = std::find_if(
+                      str.rbegin(),
+                      str.rend(),
+                      [](char ch)
+                      {
+                          return !sfun::isspace(ch);
+                      })
+                      .base();
     auto lastNotBlank = std::distance(str.begin(), it);
     return str.substr(0, static_cast<std::size_t>(lastNotBlank));
 }
@@ -108,7 +118,7 @@ inline std::vector<std::string_view> split(std::string_view str, std::string_vie
     auto result = std::vector<std::string_view>{};
     auto delimPos = std::size_t{0};
     auto pos = std::size_t{0};
-    while (pos < str.size()){
+    while (pos < str.size()) {
         delimPos = str.find(delim, delimPos);
         if (delimPos == std::string_view::npos)
             delimPos = str.size();
@@ -129,7 +139,7 @@ inline std::string replace(std::string str, std::string_view subStr, std::string
         return str;
 
     auto pos = str.find(subStr);
-    while (pos != std::string::npos){
+    while (pos != std::string::npos) {
         str.replace(pos, subStr.size(), val);
         pos = str.find(subStr, pos + val.size());
     }
@@ -141,11 +151,16 @@ std::string join(const TRange& range, std::string_view separator)
 {
     static_assert(std::is_constructible_v<std::string, decltype(*std::begin(range))>);
 
-    const auto size = [&] {
+    const auto size = [&]
+    {
         auto res = std::size_t{};
-        std::for_each(std::begin(range), std::end(range), [&res](const auto& val) {
-            res += std::size(val);
-        });
+        std::for_each(
+                std::begin(range),
+                std::end(range),
+                [&res](const auto& val)
+                {
+                    res += std::size(val);
+                });
         if (std::size(range) > 0)
             res += (std::size(range) - 1) * separator.size();
         return res;
@@ -153,10 +168,14 @@ std::string join(const TRange& range, std::string_view separator)
 
     auto res = std::string{};
     res.reserve(size);
-    std::for_each(std::begin(range), std::end(range), [&](const auto& val){
-        res += std::string{val};
-        res += std::string{separator};
-    });
+    std::for_each(
+            std::begin(range),
+            std::end(range),
+            [&](const auto& val)
+            {
+                res += std::string{val};
+                res += std::string{separator};
+            });
     if (!res.empty())
         res.resize(res.size() - separator.size());
     return res;
@@ -198,6 +217,6 @@ inline std::string_view between(std::string_view str, std::string_view afterStr,
 {
     return before(after(str, afterStr), beforeStr);
 }
-}
+} //namespace sfun
 
 #endif //SFUN_STRING_UTILS_H

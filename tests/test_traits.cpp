@@ -9,7 +9,7 @@
 
 using namespace sfun;
 
-struct Foo{};
+struct Foo {};
 
 TEST(Traits, IsOptional)
 {

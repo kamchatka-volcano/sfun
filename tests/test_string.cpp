@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
 #include <sfun/string_utils.h>
+#include <gtest/gtest.h>
 
 using namespace sfun;
 
@@ -12,7 +12,6 @@ TEST(String, TrimFront)
     EXPECT_EQ(trimFront(" \n \t   "), "");
     EXPECT_EQ(trimFront("\n\t"), "");
     EXPECT_EQ(trimFront(""), "");
-
 }
 
 TEST(String, TrimBack)
@@ -38,25 +37,20 @@ TEST(String, Trim)
 
 TEST(String, Split)
 {
-    EXPECT_EQ(split("hello world"),
-              (std::vector<std::string_view>{"hello", "world"}));
-    EXPECT_EQ(split("hello world", ","),
-              (std::vector<std::string_view>{"hello world"}));
-    EXPECT_EQ(split("hello world, nice weather", ","),
-              (std::vector<std::string_view>{"hello world", "nice weather"}));
-    EXPECT_EQ(split("hello world\n, nice weather", ",", false),
-              (std::vector<std::string_view>{"hello world\n", " nice weather"}));
-    EXPECT_EQ(split(""),
-              (std::vector<std::string_view>{""}));
-    EXPECT_EQ(split("hello world", ""),
-              (std::vector<std::string_view>{"hello world"}));
-    EXPECT_EQ(split("", ""),
-              (std::vector<std::string_view>{""}));
+    EXPECT_EQ(split("hello world"), (std::vector<std::string_view>{"hello", "world"}));
+    EXPECT_EQ(split("hello world", ","), (std::vector<std::string_view>{"hello world"}));
+    EXPECT_EQ(split("hello world, nice weather", ","), (std::vector<std::string_view>{"hello world", "nice weather"}));
+    EXPECT_EQ(
+            split("hello world\n, nice weather", ",", false),
+            (std::vector<std::string_view>{"hello world\n", " nice weather"}));
+    EXPECT_EQ(split(""), (std::vector<std::string_view>{""}));
+    EXPECT_EQ(split("hello world", ""), (std::vector<std::string_view>{"hello world"}));
+    EXPECT_EQ(split("", ""), (std::vector<std::string_view>{""}));
 }
 
 TEST(String, Replace)
 {
-    EXPECT_EQ(replace("hello world","world", "space"), "hello space");
+    EXPECT_EQ(replace("hello world", "world", "space"), "hello space");
     EXPECT_EQ(replace("hello world and other world", "world", "space"), "hello space and other space");
     EXPECT_EQ(replace("hello world", "moon", "space"), "hello world");
     EXPECT_EQ(replace("hello world", "world", ""), "hello ");
@@ -81,7 +75,7 @@ TEST(String, Join)
         EXPECT_EQ(join(stringList, ", "), "");
     }
     {
-        auto viewList = std::vector<std::string_view>{"a", "b" , "c"};
+        auto viewList = std::vector<std::string_view>{"a", "b", "c"};
         EXPECT_EQ(join(viewList, ""), "abc");
         EXPECT_EQ(join(viewList, ", "), "a, b, c");
 

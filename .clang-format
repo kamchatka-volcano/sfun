@@ -31,6 +31,10 @@ PenaltyBreakAssignment: 10
 SpaceBeforeCpp11BracedList: false
 SpaceInEmptyBlock: false
 SpaceInEmptyParentheses: false
+SpaceAfterTemplateKeyword: false
+SpacesInLineCommentPrefix:
+  Minimum: 0
+  Maximum: -1
 FixNamespaceComments: true
 UseCRLF: false
 IncludeCategories:

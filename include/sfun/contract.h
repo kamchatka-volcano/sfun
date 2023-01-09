@@ -9,10 +9,9 @@
 #define _sfunLikely(x) __builtin_expect(!!(x), 1)
 #else
 #define _sfunLikely(x) (!!(x))
-#endif // defined(__clang__) || defined(__GNUC__)
+#endif //defined(__clang__) || defined(__GNUC__)
 
-#define sfunContractCheck(cond) \
-    (_sfunLikely(cond) ? static_cast<void>(0) : std::terminate())
+#define sfunContractCheck(cond) (_sfunLikely(cond) ? static_cast<void>(0) : std::terminate())
 
 #define sfunPrecondition sfunContractCheck
 #define sfunPostcondition sfunContractCheck

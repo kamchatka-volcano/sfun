@@ -5,7 +5,7 @@
 
 namespace sfun {
 
-template <typename T>
+template<typename T>
 class Interface {
 public:
     Interface()
@@ -21,7 +21,7 @@ public:
     Interface& operator=(Interface&&) = delete;
 };
 
-template <typename T>
+template<typename T>
 struct AccessToken {
 private:
     AccessToken(T&){};
@@ -31,16 +31,16 @@ private:
 
 namespace detail {
 
-template <typename T>
+template<typename T>
 struct AccessPermissionBase {
     void operator()(AccessToken<T>) {}
 };
 
-} // namespace detail
+} //namespace detail
 
-template <typename... Ts>
+template<typename... Ts>
 struct AccessPermission : private detail::AccessPermissionBase<Ts>... {
-    template <typename TAccessToken>
+    template<typename TAccessToken>
     AccessPermission(TAccessToken accessToken)
     {
         operator()(accessToken);
@@ -48,6 +48,6 @@ struct AccessPermission : private detail::AccessPermissionBase<Ts>... {
     using detail::AccessPermissionBase<Ts>::operator()...;
 };
 
-} // namespace sfun
+} //namespace sfun
 
-#endif // SFUN_INTERFACE_H
+#endif //SFUN_INTERFACE_H
