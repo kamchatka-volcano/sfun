@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <sfun/string_utils.h>
 
-using namespace sfun::string_utils;
+using namespace sfun;
 
 TEST(String, TrimFront)
 {

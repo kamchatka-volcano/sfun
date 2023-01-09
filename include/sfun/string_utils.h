@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <cctype>
 
-namespace sfun::string_utils{
+namespace sfun{
 
 inline bool isalnum(char ch)
 {
@@ -80,7 +80,7 @@ inline char toupper(char ch)
 inline std::string_view trimFront(std::string_view str)
 {
     auto it = std::find_if(str.begin(), str.end(), [](char ch){
-        return !string_utils::isspace(ch);
+        return !sfun::isspace(ch);
     });
     auto firstNotBlank = std::distance(str.begin(), it);
     return str.substr(static_cast<std::size_t>(firstNotBlank));
@@ -89,7 +89,7 @@ inline std::string_view trimFront(std::string_view str)
 inline std::string_view trimBack(std::string_view str)
 {
     auto it = std::find_if(str.rbegin(), str.rend(), [](char ch){
-        return !string_utils::isspace(ch);
+        return !sfun::isspace(ch);
     }).base();
     auto lastNotBlank = std::distance(str.begin(), it);
     return str.substr(0, static_cast<std::size_t>(lastNotBlank));

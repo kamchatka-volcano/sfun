@@ -1,12 +1,13 @@
+#include <sfun/type_traits.h>
 #include <gtest/gtest.h>
-#include <sfun/traits.h>
 #include <array>
-#include <vector>
 #include <list>
 #include <map>
+#include <tuple>
 #include <unordered_map>
+#include <vector>
 
-using namespace sfun::traits;
+using namespace sfun;
 
 struct Foo{};
 
@@ -45,4 +46,9 @@ TEST(Traits, IsAssociativeContainer)
     EXPECT_FALSE((is_associative_container_v<std::list<Foo>>));
     EXPECT_TRUE((is_associative_container_v<std::map<int, std::string>>));
     EXPECT_TRUE((is_associative_container_v<std::unordered_map<int, Foo>>));
+}
+
+TEST(Traits, DecayTuple)
+{
+    EXPECT_TRUE((std::is_same_v<decay_tuple_t<std::tuple<const int&, double&&>>, std::tuple<int, double>>));
 }
