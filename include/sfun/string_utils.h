@@ -78,8 +78,10 @@ inline char toupper(char ch)
     return static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
 }
 
-inline std::string_view trimFront(std::string_view str)
+template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
+inline std::string_view trimFront(const T& strVal)
 {
+    auto str = std::string_view{strVal};
     auto it = std::find_if(
             str.begin(),
             str.end(),
@@ -91,8 +93,15 @@ inline std::string_view trimFront(std::string_view str)
     return str.substr(static_cast<std::size_t>(firstNotBlank));
 }
 
-inline std::string_view trimBack(std::string_view str)
+inline std::string trimFront(std::string&& str)
 {
+    return std::string{trimFront(std::string_view{str})};
+}
+
+template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
+inline std::string_view trimBack(const T& strVal)
+{
+    auto str = std::string_view{strVal};
     auto it = std::find_if(
                       str.rbegin(),
                       str.rend(),
@@ -105,13 +114,27 @@ inline std::string_view trimBack(std::string_view str)
     return str.substr(0, static_cast<std::size_t>(lastNotBlank));
 }
 
-inline std::string_view trim(std::string_view str)
+inline std::string trimBack(std::string&& str)
 {
+    return std::string{trimBack(std::string_view{str})};
+}
+
+template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
+inline std::string_view trim(const T& strVal)
+{
+    auto str = std::string_view{strVal};
     return trimBack(trimFront(str));
 }
 
-inline std::vector<std::string_view> split(std::string_view str, std::string_view delim = " ", bool trimmed = true)
+inline std::string trim(std::string&& str)
 {
+    return std::string{trim(std::string_view{str})};
+}
+
+template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
+inline std::vector<std::string_view> split(const T& strVal, std::string_view delim = " ", bool trimmed = true)
+{
+    auto str = std::string_view{strVal};
     if (delim.empty() || str.empty())
         return std::vector<std::string_view>{str};
 
@@ -131,6 +154,21 @@ inline std::vector<std::string_view> split(std::string_view str, std::string_vie
         pos = delimPos;
     }
     return result;
+}
+
+inline std::vector<std::string> split(std::string&& str, std::string_view delim = " ", bool trimmed = true)
+{
+    auto stringViewList = split(std::string_view{str}, delim, trimmed);
+    auto stringList = std::vector<std::string>{};
+    std::transform(
+            stringViewList.begin(),
+            stringViewList.end(),
+            std::back_inserter(stringList),
+            [](const std::string_view& view)
+            {
+                return std::string{view};
+            });
+    return stringList;
 }
 
 inline std::string replace(std::string str, std::string_view subStr, std::string_view val)
@@ -197,26 +235,48 @@ inline bool endsWith(std::string_view str, std::string_view val)
     return std::distance(res, str.end()) == static_cast<std::ptrdiff_t>(val.size());
 }
 
-inline std::string_view before(std::string_view str, std::string_view val)
+template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
+inline std::string_view before(const T& strVal, std::string_view val)
 {
+    auto str = std::string_view{strVal};
     auto res = str.find(val);
     if (res == std::string_view::npos)
         return str;
     return {str.data(), res};
 }
 
-inline std::string_view after(std::string_view str, std::string_view val)
+inline std::string before(std::string&& str, std::string_view val)
 {
+    return std::string{before(std::string_view{str}, val)};
+}
+
+template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
+inline std::string_view after(const T& strVal, std::string_view val)
+{
+    auto str = std::string_view{strVal};
     auto res = str.find(val);
     if (res == std::string_view::npos)
         return {};
     return {std::next(str.data(), static_cast<std::ptrdiff_t>(res + val.size())), str.size() - (res + val.size())};
 }
 
-inline std::string_view between(std::string_view str, std::string_view afterStr, std::string_view beforeStr)
+inline std::string after(std::string&& str, std::string_view val)
 {
+    return std::string{after(std::string_view{str}, val)};
+}
+
+template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
+inline std::string_view between(const T& strVal, std::string_view afterStr, std::string_view beforeStr)
+{
+    auto str = std::string_view{strVal};
     return before(after(str, afterStr), beforeStr);
 }
+
+inline std::string between(std::string&& str, std::string_view afterStr, std::string_view beforeStr)
+{
+    return std::string{between(std::string_view{str}, afterStr, beforeStr)};
+}
+
 } //namespace sfun
 
 #endif //SFUN_STRING_UTILS_H

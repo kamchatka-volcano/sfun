@@ -12,6 +12,18 @@ TEST(String, TrimFront)
     EXPECT_EQ(trimFront(" \n \t   "), "");
     EXPECT_EQ(trimFront("\n\t"), "");
     EXPECT_EQ(trimFront(""), "");
+
+    auto str = [](auto strVal)
+    {
+        return std::string{strVal};
+    };
+    EXPECT_EQ(trimFront(str("  Hello world")), "Hello world");
+    EXPECT_EQ(trimFront(str("  Hello world ")), "Hello world ");
+    EXPECT_EQ(trimFront(str(" \n\t Hello world")), "Hello world");
+    EXPECT_EQ(trimFront(str("Hello world ")), "Hello world ");
+    EXPECT_EQ(trimFront(str(" \n \t   ")), "");
+    EXPECT_EQ(trimFront(str("\n\t")), "");
+    EXPECT_EQ(trimFront(str("")), "");
 }
 
 TEST(String, TrimBack)
@@ -22,6 +34,17 @@ TEST(String, TrimBack)
     EXPECT_EQ(trimBack(" \n \t   "), "");
     EXPECT_EQ(trimBack("\n\t"), "");
     EXPECT_EQ(trimBack(""), "");
+
+    auto str = [](auto strVal)
+    {
+        return std::string{strVal};
+    };
+    EXPECT_EQ(trimBack(str("Hello world  ")), "Hello world");
+    EXPECT_EQ(trimBack(str(" Hello world  ")), " Hello world");
+    EXPECT_EQ(trimBack(str("Hello world \n\t")), "Hello world");
+    EXPECT_EQ(trimBack(str(" \n \t   ")), "");
+    EXPECT_EQ(trimBack(str("\n\t")), "");
+    EXPECT_EQ(trimBack(str("")), "");
 }
 
 TEST(String, Trim)
@@ -33,6 +56,18 @@ TEST(String, Trim)
     EXPECT_EQ(trim(" \n\t   "), "");
     EXPECT_EQ(trim("\n\t"), "");
     EXPECT_EQ(trim(""), "");
+
+    auto str = [](auto strVal)
+    {
+        return std::string{strVal};
+    };
+    EXPECT_EQ(trim(str("  Hello world")), "Hello world");
+    EXPECT_EQ(trim(str("  Hello world ")), "Hello world");
+    EXPECT_EQ(trim(str("Hello world ")), "Hello world");
+    EXPECT_EQ(trim(str(" \n\t Hello world")), "Hello world");
+    EXPECT_EQ(trim(str(" \n\t   ")), "");
+    EXPECT_EQ(trim(str("\n\t")), "");
+    EXPECT_EQ(trim(str("")), "");
 }
 
 TEST(String, Split)
@@ -46,6 +81,20 @@ TEST(String, Split)
     EXPECT_EQ(split(""), (std::vector<std::string_view>{""}));
     EXPECT_EQ(split("hello world", ""), (std::vector<std::string_view>{"hello world"}));
     EXPECT_EQ(split("", ""), (std::vector<std::string_view>{""}));
+
+    auto str = [](auto strVal)
+    {
+        return std::string{strVal};
+    };
+    EXPECT_EQ(split(str("hello world")), (std::vector<std::string>{"hello", "world"}));
+    EXPECT_EQ(split(str("hello world"), ","), (std::vector<std::string>{"hello world"}));
+    EXPECT_EQ(split(str("hello world, nice weather"), ","), (std::vector<std::string>{"hello world", "nice weather"}));
+    EXPECT_EQ(
+            split(str("hello world\n, nice weather"), ",", false),
+            (std::vector<std::string>{"hello world\n", " nice weather"}));
+    EXPECT_EQ(split(str("")), (std::vector<std::string>{""}));
+    EXPECT_EQ(split(str("hello world"), ""), (std::vector<std::string>{"hello world"}));
+    EXPECT_EQ(split(str(""), ""), (std::vector<std::string>{""}));
 }
 
 TEST(String, Replace)
@@ -124,6 +173,16 @@ TEST(String, Before)
     EXPECT_EQ(before("hello world", ""), "");
     EXPECT_EQ(before("", "moon"), "");
     EXPECT_EQ(before("", ""), "");
+
+    auto str = [](auto strVal)
+    {
+        return std::string{strVal};
+    };
+    EXPECT_EQ(before(str("hello world"), "world"), "hello ");
+    EXPECT_EQ(before(str("hello world"), "moon"), "hello world");
+    EXPECT_EQ(before(str("hello world"), ""), "");
+    EXPECT_EQ(before(str(""), "moon"), "");
+    EXPECT_EQ(before(str(""), ""), "");
 }
 
 TEST(String, After)
@@ -133,6 +192,16 @@ TEST(String, After)
     EXPECT_EQ(after("hello world", ""), "hello world");
     EXPECT_EQ(after("", "moon"), "");
     EXPECT_EQ(after("", ""), "");
+
+    auto str = [](auto strVal)
+    {
+        return std::string{strVal};
+    };
+    EXPECT_EQ(after(str("hello world"), "hello"), " world");
+    EXPECT_EQ(after(str("hello world"), "moon"), "");
+    EXPECT_EQ(after(str("hello world"), ""), "hello world");
+    EXPECT_EQ(after(str(""), "moon"), "");
+    EXPECT_EQ(after(str(""), ""), "");
 }
 
 TEST(String, Between)
@@ -146,6 +215,20 @@ TEST(String, Between)
     EXPECT_EQ(between("", "", "moon"), "");
     EXPECT_EQ(between("", "moon", ""), "");
     EXPECT_EQ(between("", "", ""), "");
+
+    auto str = [](auto strVal)
+    {
+        return std::string{strVal};
+    };
+    EXPECT_EQ(between(str("hello world!"), "hello", "!"), " world");
+    EXPECT_EQ(between(str("hello world!"), "hello", "moon"), " world!");
+    EXPECT_EQ(between(str("hello world!"), "moon", "!"), "");
+    EXPECT_EQ(between(str("hello world!"), "", "!"), "hello world");
+    EXPECT_EQ(between(str("hello world!"), "hello", ""), "");
+    EXPECT_EQ(between(str(""), "hello", "moon"), "");
+    EXPECT_EQ(between(str(""), "", "moon"), "");
+    EXPECT_EQ(between(str(""), "moon", ""), "");
+    EXPECT_EQ(between(str(""), "", ""), "");
 }
 
 TEST(String, cctypeWrappers)
