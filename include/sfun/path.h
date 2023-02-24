@@ -1,7 +1,7 @@
 #ifndef SFUN_PATH_H
 #define SFUN_PATH_H
 
-#include "winconv.h"
+#include "wstringconv.h"
 #include <filesystem>
 #include <string>
 #include <string_view>
@@ -11,7 +11,7 @@ namespace sfun {
 inline std::filesystem::path makePath(std::string_view str)
 {
 #ifdef _WIN32
-    return toUtf16(str);
+    return toWString(str);
 #else
     return str;
 #endif
@@ -20,7 +20,7 @@ inline std::filesystem::path makePath(std::string_view str)
 inline std::string pathString(const std::filesystem::path& path)
 {
 #ifdef _WIN32
-    return toUtf8(path.wstring());
+    return fromWString(path.wstring());
 #else
     return path.string();
 #endif
