@@ -62,6 +62,33 @@ struct is_associative_container<
 template<typename T>
 inline constexpr auto is_associative_container_v = is_associative_container<T>::value;
 
+template<typename, typename = void>
+struct provides_member_access : std::false_type {};
+
+template<typename T>
+struct provides_member_access<T, std::void_t<decltype(std::declval<T>().operator->())>> : std::true_type {};
+
+template<typename T>
+inline constexpr auto provides_member_access_v = provides_member_access<T>::value;
+
+template<typename, typename = void>
+struct provides_array_element_access : std::false_type {};
+
+template<typename T>
+struct provides_array_element_access<T, std::void_t<decltype(std::declval<T>().operator[](0u))>> : std::true_type{};
+
+template<typename T>
+inline constexpr auto provides_array_element_access_v = provides_array_element_access<T>::value;
+
+template<typename, typename = void>
+struct is_dereferencable : std::false_type {};
+
+template<typename T>
+struct is_dereferencable<T, std::void_t<decltype(*std::declval<T>())>> : std::true_type {};
+
+template<typename T>
+inline constexpr auto is_dereferencable_v = is_dereferencable<T>::value;
+
 template<typename T>
 struct type_identity {
     using type = T;
