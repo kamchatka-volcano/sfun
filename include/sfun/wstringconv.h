@@ -11,7 +11,7 @@
 namespace sfun {
 
 template<typename T = void>
-inline std::string fromWString([[maybe_unused]] std::wstring_view utf16String)
+inline std::string from_wstring([[maybe_unused]] std::wstring_view utf16String)
 {
 #ifdef _WIN32
     auto result = std::string{};
@@ -26,7 +26,7 @@ inline std::string fromWString([[maybe_unused]] std::wstring_view utf16String)
 }
 
 template<typename T = void>
-inline std::wstring toWString([[maybe_unused]] std::string_view utf8String)
+inline std::wstring to_wstring([[maybe_unused]] std::string_view utf8String)
 {
 #ifdef _WIN32
     auto result = std::wstring{};

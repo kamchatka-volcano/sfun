@@ -6,26 +6,26 @@
 namespace sfun {
 
 template<typename T>
-class Interface {
+class interface {
 public:
-    Interface()
+    interface()
     {
         static_assert(
-                std::is_base_of_v<Interface<T>, T> && !std::is_convertible_v<T*, Interface<T>*>,
-                "T must be derived from Interface<T> privately");
+                std::is_base_of_v<interface<T>, T> && !std::is_convertible_v<T*, interface<T>*>,
+                "T must be derived from interface<T> privately");
     }
-    virtual ~Interface() = default;
-    Interface(const Interface&) = delete;
-    Interface& operator=(const Interface&) = delete;
-    Interface(Interface&&) = delete;
-    Interface& operator=(Interface&&) = delete;
+    virtual ~interface() = default;
+    interface(const interface&) = delete;
+    interface& operator=(const interface&) = delete;
+    interface(interface&&) = delete;
+    interface& operator=(interface&&) = delete;
 };
 
 template<typename T>
-struct AccessToken {
+struct access_token {
 private:
-    AccessToken(T&){};
-    AccessToken(){};
+    access_token(T&){};
+    access_token(){};
     friend T;
 };
 
@@ -33,15 +33,15 @@ namespace detail {
 
 template<typename T>
 struct AccessPermissionBase {
-    void operator()(AccessToken<T>) {}
+    void operator()(access_token<T>) {}
 };
 
 } //namespace detail
 
 template<typename... Ts>
-struct AccessPermission : private detail::AccessPermissionBase<Ts>... {
+struct access_permission : private detail::AccessPermissionBase<Ts>... {
     template<typename TAccessToken>
-    AccessPermission(TAccessToken accessToken)
+    access_permission(TAccessToken accessToken)
     {
         operator()(accessToken);
     }

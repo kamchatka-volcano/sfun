@@ -5,46 +5,46 @@ using namespace sfun;
 
 TEST(String, TrimFront)
 {
-    EXPECT_EQ(trimFront("  Hello world"), "Hello world");
-    EXPECT_EQ(trimFront("  Hello world "), "Hello world ");
-    EXPECT_EQ(trimFront(" \n\t Hello world"), "Hello world");
-    EXPECT_EQ(trimFront("Hello world "), "Hello world ");
-    EXPECT_EQ(trimFront(" \n \t   "), "");
-    EXPECT_EQ(trimFront("\n\t"), "");
-    EXPECT_EQ(trimFront(""), "");
+    EXPECT_EQ(trim_front("  Hello world"), "Hello world");
+    EXPECT_EQ(trim_front("  Hello world "), "Hello world ");
+    EXPECT_EQ(trim_front(" \n\t Hello world"), "Hello world");
+    EXPECT_EQ(trim_front("Hello world "), "Hello world ");
+    EXPECT_EQ(trim_front(" \n \t   "), "");
+    EXPECT_EQ(trim_front("\n\t"), "");
+    EXPECT_EQ(trim_front(""), "");
 
     auto str = [](auto strVal)
     {
         return std::string{strVal};
     };
-    EXPECT_EQ(trimFront(str("  Hello world")), "Hello world");
-    EXPECT_EQ(trimFront(str("  Hello world ")), "Hello world ");
-    EXPECT_EQ(trimFront(str(" \n\t Hello world")), "Hello world");
-    EXPECT_EQ(trimFront(str("Hello world ")), "Hello world ");
-    EXPECT_EQ(trimFront(str(" \n \t   ")), "");
-    EXPECT_EQ(trimFront(str("\n\t")), "");
-    EXPECT_EQ(trimFront(str("")), "");
+    EXPECT_EQ(trim_front(str("  Hello world")), "Hello world");
+    EXPECT_EQ(trim_front(str("  Hello world ")), "Hello world ");
+    EXPECT_EQ(trim_front(str(" \n\t Hello world")), "Hello world");
+    EXPECT_EQ(trim_front(str("Hello world ")), "Hello world ");
+    EXPECT_EQ(trim_front(str(" \n \t   ")), "");
+    EXPECT_EQ(trim_front(str("\n\t")), "");
+    EXPECT_EQ(trim_front(str("")), "");
 }
 
 TEST(String, TrimBack)
 {
-    EXPECT_EQ(trimBack("Hello world  "), "Hello world");
-    EXPECT_EQ(trimBack(" Hello world  "), " Hello world");
-    EXPECT_EQ(trimBack("Hello world \n\t"), "Hello world");
-    EXPECT_EQ(trimBack(" \n \t   "), "");
-    EXPECT_EQ(trimBack("\n\t"), "");
-    EXPECT_EQ(trimBack(""), "");
+    EXPECT_EQ(trim_back("Hello world  "), "Hello world");
+    EXPECT_EQ(trim_back(" Hello world  "), " Hello world");
+    EXPECT_EQ(trim_back("Hello world \n\t"), "Hello world");
+    EXPECT_EQ(trim_back(" \n \t   "), "");
+    EXPECT_EQ(trim_back("\n\t"), "");
+    EXPECT_EQ(trim_back(""), "");
 
     auto str = [](auto strVal)
     {
         return std::string{strVal};
     };
-    EXPECT_EQ(trimBack(str("Hello world  ")), "Hello world");
-    EXPECT_EQ(trimBack(str(" Hello world  ")), " Hello world");
-    EXPECT_EQ(trimBack(str("Hello world \n\t")), "Hello world");
-    EXPECT_EQ(trimBack(str(" \n \t   ")), "");
-    EXPECT_EQ(trimBack(str("\n\t")), "");
-    EXPECT_EQ(trimBack(str("")), "");
+    EXPECT_EQ(trim_back(str("Hello world  ")), "Hello world");
+    EXPECT_EQ(trim_back(str(" Hello world  ")), " Hello world");
+    EXPECT_EQ(trim_back(str("Hello world \n\t")), "Hello world");
+    EXPECT_EQ(trim_back(str(" \n \t   ")), "");
+    EXPECT_EQ(trim_back(str("\n\t")), "");
+    EXPECT_EQ(trim_back(str("")), "");
 }
 
 TEST(String, Trim)
@@ -150,20 +150,20 @@ TEST(String, Join)
 
 TEST(String, StartsWith)
 {
-    EXPECT_TRUE(startsWith("hello world", "hell"));
-    EXPECT_FALSE(startsWith("hello world", "moon"));
-    EXPECT_FALSE(startsWith("", "moon"));
-    EXPECT_TRUE(startsWith("hello world", ""));
-    EXPECT_TRUE(startsWith("", ""));
+    EXPECT_TRUE(starts_with("hello world", "hell"));
+    EXPECT_FALSE(starts_with("hello world", "moon"));
+    EXPECT_FALSE(starts_with("", "moon"));
+    EXPECT_TRUE(starts_with("hello world", ""));
+    EXPECT_TRUE(starts_with("", ""));
 }
 
 TEST(String, EndsWith)
 {
-    EXPECT_TRUE(endsWith("hello world", "world"));
-    EXPECT_FALSE(endsWith("hello world", "moon"));
-    EXPECT_FALSE(endsWith("", "moon"));
-    EXPECT_TRUE(endsWith("hello world", ""));
-    EXPECT_TRUE(endsWith("", ""));
+    EXPECT_TRUE(ends_with("hello world", "world"));
+    EXPECT_FALSE(ends_with("hello world", "moon"));
+    EXPECT_FALSE(ends_with("", "moon"));
+    EXPECT_TRUE(ends_with("hello world", ""));
+    EXPECT_TRUE(ends_with("", ""));
 }
 
 TEST(String, Before)

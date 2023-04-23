@@ -80,7 +80,7 @@ inline char toupper(char ch)
 }
 
 template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
-inline std::string_view trimFront(const T& strVal)
+inline std::string_view trim_front(const T& strVal)
 {
     auto str = std::string_view{strVal};
     auto it = std::find_if(
@@ -94,13 +94,13 @@ inline std::string_view trimFront(const T& strVal)
     return str.substr(static_cast<std::size_t>(firstNotBlank));
 }
 
-inline std::string trimFront(std::string&& str)
+inline std::string trim_front(std::string&& str)
 {
-    return std::string{trimFront(std::string_view{str})};
+    return std::string{trim_front(std::string_view{str})};
 }
 
 template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
-inline std::string_view trimBack(const T& strVal)
+inline std::string_view trim_back(const T& strVal)
 {
     auto str = std::string_view{strVal};
     auto it = std::find_if(
@@ -115,16 +115,16 @@ inline std::string_view trimBack(const T& strVal)
     return str.substr(0, static_cast<std::size_t>(lastNotBlank));
 }
 
-inline std::string trimBack(std::string&& str)
+inline std::string trim_back(std::string&& str)
 {
-    return std::string{trimBack(std::string_view{str})};
+    return std::string{trim_back(std::string_view{str})};
 }
 
 template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
 inline std::string_view trim(const T& strVal)
 {
     auto str = std::string_view{strVal};
-    return trimBack(trimFront(str));
+    return trim_back(trim_front(str));
 }
 
 inline std::string trim(std::string&& str)
@@ -220,13 +220,13 @@ std::string join(const TRange& range, std::string_view separator)
     return res;
 }
 
-inline bool startsWith(std::string_view str, std::string_view val)
+inline bool starts_with(std::string_view str, std::string_view val)
 {
     auto res = str.find(val);
     return res == 0;
 }
 
-inline bool endsWith(std::string_view str, std::string_view val)
+inline bool ends_with(std::string_view str, std::string_view val)
 {
     if (val.empty())
         return true;

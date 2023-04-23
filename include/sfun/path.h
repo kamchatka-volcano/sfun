@@ -8,19 +8,19 @@
 
 namespace sfun {
 
-inline std::filesystem::path makePath(std::string_view str)
+inline std::filesystem::path make_path(std::string_view str)
 {
 #ifdef _WIN32
-    return toWString(str);
+    return to_wstring(str);
 #else
     return str;
 #endif
 }
 
-inline std::string pathString(const std::filesystem::path& path)
+inline std::string path_string(const std::filesystem::path& path)
 {
 #ifdef _WIN32
-    return fromWString(path.wstring());
+    return from_wstring(path.wstring());
 #else
     return path.string();
 #endif
