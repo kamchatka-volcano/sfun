@@ -41,7 +41,7 @@ struct member {
     template<
             typename V,
             typename TCheck = T,
-            std::enable_if_t<!std::is_base_of_v<member<TCheck>, std::remove_reference_t<V>>>* = nullptr>
+            std::enable_if_t<!std::is_same_v<member<TCheck>, std::decay_t<V>>>* = nullptr>
     constexpr member(V&& val)
         : value_{detail::memberInit<T>(std::forward<V>(val))}
     {
@@ -125,7 +125,7 @@ struct member {
             std::enable_if_t<provides_array_element_access_v<CheckType> || std::is_pointer_v<CheckType>>* = nullptr>
     constexpr auto& operator[](std::size_t index)
     {
-        return value_[index];
+        return get()[index];
     }
 
     template<
@@ -133,7 +133,7 @@ struct member {
             std::enable_if_t<provides_array_element_access_v<CheckType> || std::is_pointer_v<CheckType>>* = nullptr>
     constexpr const auto& operator[](std::size_t index) const
     {
-        return value_[index];
+        return get()[index];
     }
 
     template<
@@ -142,7 +142,7 @@ struct member {
             std::enable_if_t<std::is_invocable_v<CheckType, TArgs...>>* = nullptr>
     constexpr decltype(auto) operator()(TArgs&&... args)
     {
-        return value_(std::forward<TArgs>(args)...);
+        return get()(std::forward<TArgs>(args)...);
     }
 
     template<
@@ -151,7 +151,7 @@ struct member {
             std::enable_if_t<std::is_invocable_v<CheckType, TArgs...>>* = nullptr>
     constexpr decltype(auto) operator()(TArgs&&... args) const
     {
-        return value_(std::forward<TArgs>(args)...);
+        return get()(std::forward<TArgs>(args)...);
     }
 
     template<typename V>
