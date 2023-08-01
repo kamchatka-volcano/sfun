@@ -89,6 +89,15 @@ struct is_dereferencable<T, std::void_t<decltype(*std::declval<T>())>> : std::tr
 template<typename T>
 inline constexpr auto is_dereferencable_v = is_dereferencable<T>::value;
 
+template<class T, class U, class = void>
+struct is_explicitly_convertible : std::false_type {};
+
+template<class T, class U>
+struct is_explicitly_convertible<T, U, std::void_t<decltype(static_cast<U>(std::declval<T>()))>> : std::true_type {};
+
+template<class T, class U>
+inline constexpr auto is_explicitly_convertible_v = is_explicitly_convertible<T, U>::value;
+
 template<typename T>
 struct type_identity {
     using type = T;
