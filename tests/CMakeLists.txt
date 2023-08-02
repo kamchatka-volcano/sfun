@@ -4,6 +4,7 @@ project(test_sfun)
 SealLake_GoogleTest(
         SOURCES
         test_optional_ref.cpp
+        test_precondition.cpp
         test_string.cpp
         test_traits.cpp
         test_type_list.cpp
