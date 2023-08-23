@@ -87,11 +87,13 @@ public:
 
     constexpr const T* operator->() const
     {
+        sfun_precondition(value_);
         return value_;
     }
 
     constexpr T* operator->()
     {
+        sfun_precondition(value_);
         return value_;
     }
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
-project(sfun VERSION 4.1.0 DESCRIPTION "stuff from unnamed namespaces - a c++17 helper library")
+project(sfun VERSION 4.1.1 DESCRIPTION "stuff from unnamed namespace - a c++17 helper library")
 include(GNUInstallDirs)
 include(external/seal_lake)
 
