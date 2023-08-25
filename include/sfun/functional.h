@@ -2,6 +2,7 @@
 #define SFUN_FUNCTIONAL_H
 
 #include "type_list.h"
+#include <functional>
 #include <utility>
 
 namespace sfun {
@@ -95,6 +96,28 @@ struct overloaded : Ts... {
 };
 template<class... Ts>
 overloaded(Ts...) -> overloaded<Ts...>;
+
+template<typename F, typename... Args>
+auto try_invoke(F&& f, Args&&... args) noexcept
+{
+    if constexpr (std::is_same_v<std::invoke_result_t<F, Args...>, void>) {
+        try {
+            std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
+            return true;
+        }
+        catch (...) {
+            return false;
+        }
+    }
+    else {
+        try {
+            return std::optional{std::invoke(std::forward<F>(f), std::forward<Args>(args)...)};
+        }
+        catch (...) {
+            return std::optional<std::invoke_result_t<F, Args...>>{std::nullopt};
+        }
+    }
+}
 
 } //namespace sfun
 
