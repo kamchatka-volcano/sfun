@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cctype>
 #include <iterator>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -237,45 +238,66 @@ inline bool ends_with(std::string_view str, std::string_view val)
 }
 
 template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
-inline std::string_view before(const T& strVal, std::string_view val)
+inline std::optional<std::string_view> before(const T& strVal, std::string_view val)
 {
+    if (val.empty())
+        return std::nullopt;
+
     auto str = std::string_view{strVal};
     auto res = str.find(val);
     if (res == std::string_view::npos)
-        return str;
-    return {str.data(), res};
+        return std::nullopt;
+    return std::string_view{str.data(), res};
 }
 
-inline std::string before(std::string&& str, std::string_view val)
+inline std::optional<std::string> before(std::string&& str, std::string_view val)
 {
-    return std::string{before(std::string_view{str}, val)};
+    auto result = before(std::string_view{str}, val);
+    if (!result.has_value())
+        return std::nullopt;
+
+    return std::string{result.value()};
 }
 
 template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
-inline std::string_view after(const T& strVal, std::string_view val)
+inline std::optional<std::string_view> after(const T& strVal, std::string_view val)
 {
+    if (val.empty())
+        return std::nullopt;
+
     auto str = std::string_view{strVal};
     auto res = str.find(val);
     if (res == std::string_view::npos)
-        return {};
-    return {std::next(str.data(), static_cast<std::ptrdiff_t>(res + val.size())), str.size() - (res + val.size())};
+        return std::nullopt;
+    return std::string_view{
+            std::next(str.data(), static_cast<std::ptrdiff_t>(res + val.size())),
+            str.size() - (res + val.size())};
 }
 
-inline std::string after(std::string&& str, std::string_view val)
+inline std::optional<std::string> after(std::string&& str, std::string_view val)
 {
-    return std::string{after(std::string_view{str}, val)};
+    auto result = after(std::string_view{str}, val);
+    if (!result.has_value())
+        return std::nullopt;
+    return std::string{result.value()};
 }
 
 template<typename T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>* = nullptr>
-inline std::string_view between(const T& strVal, std::string_view afterStr, std::string_view beforeStr)
+inline std::optional<std::string_view> between(const T& strVal, std::string_view afterStr, std::string_view beforeStr)
 {
     auto str = std::string_view{strVal};
-    return before(after(str, afterStr), beforeStr);
+    auto partAfter = after(str, afterStr);
+    if (!partAfter.has_value())
+        return std::nullopt;
+    return before(partAfter.value(), beforeStr);
 }
 
-inline std::string between(std::string&& str, std::string_view afterStr, std::string_view beforeStr)
+inline std::optional<std::string> between(std::string&& str, std::string_view afterStr, std::string_view beforeStr)
 {
-    return std::string{between(std::string_view{str}, afterStr, beforeStr)};
+    auto result = between(std::string_view{str}, afterStr, beforeStr);
+    if (!result.has_value())
+        return std::nullopt;
+    return std::string{result.value()};
 }
 
 } //namespace sfun

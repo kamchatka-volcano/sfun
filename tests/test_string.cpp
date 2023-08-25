@@ -168,67 +168,80 @@ TEST(String, EndsWith)
 
 TEST(String, Before)
 {
-    EXPECT_EQ(before("hello world", "world"), "hello ");
-    EXPECT_EQ(before("hello world", "moon"), "hello world");
-    EXPECT_EQ(before("hello world", ""), "");
-    EXPECT_EQ(before("", "moon"), "");
-    EXPECT_EQ(before("", ""), "");
+    EXPECT_TRUE(before("hello world", "world").has_value());
+    EXPECT_EQ(before("hello world", "world").value(), "hello ");
+
+    EXPECT_FALSE(before("hello world", "moon").has_value());
+    EXPECT_FALSE(before("hello world", "").has_value());
+    EXPECT_FALSE(before("", "moon").has_value());
+    EXPECT_FALSE(before("", "").has_value());
 
     auto str = [](auto strVal)
     {
         return std::string{strVal};
     };
-    EXPECT_EQ(before(str("hello world"), "world"), "hello ");
-    EXPECT_EQ(before(str("hello world"), "moon"), "hello world");
-    EXPECT_EQ(before(str("hello world"), ""), "");
-    EXPECT_EQ(before(str(""), "moon"), "");
-    EXPECT_EQ(before(str(""), ""), "");
+
+    EXPECT_TRUE(before(str("hello world"), "world").has_value());
+    EXPECT_EQ(before(str("hello world"), "world").value(), "hello ");
+
+    EXPECT_FALSE(before(str("hello world"), "moon").has_value());
+    EXPECT_FALSE(before(str("hello world"), "").has_value());
+    EXPECT_FALSE(before(str(""), "moon").has_value());
+    EXPECT_FALSE(before(str(""), "").has_value());
 }
 
 TEST(String, After)
 {
-    EXPECT_EQ(after("hello world", "hello"), " world");
-    EXPECT_EQ(after("hello world", "moon"), "");
-    EXPECT_EQ(after("hello world", ""), "hello world");
-    EXPECT_EQ(after("", "moon"), "");
-    EXPECT_EQ(after("", ""), "");
+    EXPECT_TRUE(after("hello world", "hello").has_value());
+    EXPECT_EQ(after("hello world", "hello").value(), " world");
+
+    EXPECT_FALSE(after("hello world", "moon").has_value());
+    EXPECT_FALSE(after("hello world", "").has_value());
+    EXPECT_FALSE(after("", "moon").has_value());
+    EXPECT_FALSE(after("", "").has_value());
 
     auto str = [](auto strVal)
     {
         return std::string{strVal};
     };
-    EXPECT_EQ(after(str("hello world"), "hello"), " world");
-    EXPECT_EQ(after(str("hello world"), "moon"), "");
-    EXPECT_EQ(after(str("hello world"), ""), "hello world");
-    EXPECT_EQ(after(str(""), "moon"), "");
-    EXPECT_EQ(after(str(""), ""), "");
+    EXPECT_TRUE(after(str("hello world"), "hello").has_value());
+    EXPECT_EQ(after(str("hello world"), "hello").value(), " world");
+
+    EXPECT_FALSE(after(str("hello world"), "moon").has_value());
+    EXPECT_FALSE(after(str("hello world"), "").has_value());
+    EXPECT_FALSE(after(str(""), "moon").has_value());
+    EXPECT_FALSE(after(str(""), "").has_value());
 }
 
 TEST(String, Between)
 {
-    EXPECT_EQ(between("hello world!", "hello", "!"), " world");
-    EXPECT_EQ(between("hello world!", "hello", "moon"), " world!");
-    EXPECT_EQ(between("hello world!", "moon", "!"), "");
-    EXPECT_EQ(between("hello world!", "", "!"), "hello world");
-    EXPECT_EQ(between("hello world!", "hello", ""), "");
-    EXPECT_EQ(between("", "hello", "moon"), "");
-    EXPECT_EQ(between("", "", "moon"), "");
-    EXPECT_EQ(between("", "moon", ""), "");
-    EXPECT_EQ(between("", "", ""), "");
+    EXPECT_TRUE(between("hello world!", "hello", "!").has_value());
+    EXPECT_EQ(between("hello world!", "hello", "!").value(), " world");
+    EXPECT_FALSE(between("hello world!", "hello", "moon").has_value());
+    EXPECT_FALSE(between("hello world!", "moon", "!").has_value());
+    EXPECT_FALSE(between("hello world!", "moon", "!").has_value());
+    EXPECT_FALSE(between("hello world!", "", "!").has_value());
+    EXPECT_FALSE(between("hello world!", "hello", "").has_value());
+    EXPECT_FALSE(between("", "hello", "moon").has_value());
+    EXPECT_FALSE(between("", "", "moon").has_value());
+    EXPECT_FALSE(between("", "moon", "").has_value());
+    EXPECT_FALSE(between("", "", "").has_value());
 
     auto str = [](auto strVal)
     {
         return std::string{strVal};
     };
-    EXPECT_EQ(between(str("hello world!"), "hello", "!"), " world");
-    EXPECT_EQ(between(str("hello world!"), "hello", "moon"), " world!");
-    EXPECT_EQ(between(str("hello world!"), "moon", "!"), "");
-    EXPECT_EQ(between(str("hello world!"), "", "!"), "hello world");
-    EXPECT_EQ(between(str("hello world!"), "hello", ""), "");
-    EXPECT_EQ(between(str(""), "hello", "moon"), "");
-    EXPECT_EQ(between(str(""), "", "moon"), "");
-    EXPECT_EQ(between(str(""), "moon", ""), "");
-    EXPECT_EQ(between(str(""), "", ""), "");
+    EXPECT_TRUE(between(str("hello world!"), "hello", "!").has_value());
+    EXPECT_EQ(between(str("hello world!"), "hello", "!").value(), " world");
+    EXPECT_FALSE(between(str("hello world!"), "hello", "moon").has_value());
+    EXPECT_FALSE(between(str("hello world!"), "moon", "!").has_value());
+    EXPECT_FALSE(between(str("hello world!"), "moon", "!").has_value());
+    EXPECT_FALSE(between(str("hello world!"), "", "!").has_value());
+    EXPECT_FALSE(between(str("hello world!"), "hello", "").has_value());
+    EXPECT_FALSE(between(str(""), "hello", "moon").has_value());
+    EXPECT_FALSE(between(str(""), "", "moon").has_value());
+    EXPECT_FALSE(between(str(""), "moon", "").has_value());
+    EXPECT_FALSE(between(str(""), "", "").has_value());
 }
 
 TEST(String, cctypeWrappers)
