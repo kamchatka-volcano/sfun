@@ -6,11 +6,13 @@
 
 using namespace sfun;
 
+namespace {
+
 struct Bar {
     int val = 777;
 };
 
-Bar* makeBar()
+Bar* getBar()
 {
     static auto bar = Bar{};
     return &bar;
@@ -43,18 +45,19 @@ struct Foo {
     member<const int*> cptr;
     member<int* const> ptr_const;
     member<const int* const> cptr_const;
-    member<Bar*> ptrbar = makeBar();
-    member<Bar*> ptrbar_const = makeBar();
+    member<Bar*> ptrbar = getBar();
+    member<Bar*> ptrbar_const = getBar();
     member<int> num{42};
     member<const int> num_const{42};
-    member<std::unique_ptr<Foo>> smart_ptr;
-    member<const std::unique_ptr<Foo>> smart_ptr_const = nullptr;
+    member<std::unique_ptr<Bar>> smart_ptr = std::make_unique<Bar>();
+    member<const std::unique_ptr<Bar>> smart_ptr_const = std::make_unique<Bar>();
     member<std::unique_ptr<const Bar>> csmart_ptr = std::make_unique<Bar>();
     member<const std::unique_ptr<const Bar>> csmart_ptr_const = std::make_unique<Bar>();
     member<std::string> str;
     member<const std::string> cstr = "Hello moon";
     member<std::optional<std::string>> opt_str;
-    member<const bool> flag = true;
+    member<bool> flag = true;
+    member<const bool> flag_const = true;
     member<std::function<void(int)>> func;
     member<const std::function<int()>> cfunc = []()
     {
@@ -96,7 +99,18 @@ struct FooCopyable {
     member<int (*const)()> cfunc_ptr = testFunc;
 };
 
-TEST(Member, Copy)
+TEST(Member, CopyStruct)
+{
+    int refVal = 42;
+    auto foo = FooCopyable{refVal};
+    foo.num = 0;
+    foo.str = "foobar";
+    auto foo2 = foo;
+    ASSERT_EQ(foo2.num, 0);
+    ASSERT_EQ(foo2.str, "foobar");
+}
+
+TEST(Member, AssignStruct)
 {
     int refVal = 42;
     auto foo = FooCopyable{refVal};
@@ -108,7 +122,7 @@ TEST(Member, Copy)
     ASSERT_EQ(foo.str, "foobar");
 }
 
-TEST(Member, Move)
+TEST(Member, MoveStruct)
 {
     int refVal = 42;
     auto foo = Foo{refVal};
@@ -132,33 +146,61 @@ TEST(Member, Assignment)
     ASSERT_EQ(*foo.ptr, 100);
     foo.cptr = &testVal;
     ASSERT_EQ(*foo.cptr, 100);
+    //foo.ptr_const = &testVal;
+    //foo.cptr_const = &testVal;
+
     foo.num = 100;
     ASSERT_EQ(foo.num, 100);
+    //foo.num_const = 100;
+
+    auto pBar = std::make_unique<Bar>();
+    pBar->val = 999;
+
+    foo.smart_ptr = std::move(pBar);
+    ASSERT_EQ(foo.smart_ptr->val, 999);
+    //foo.smart_ptr_const = std::make_unique<Bar>();
+
+    foo.csmart_ptr = std::make_unique<Bar>();
+    ASSERT_EQ(foo.csmart_ptr->val, 777);
+    //foo.csmart_ptr_const = std::make_unique<Bar>();
+
+    foo.str = "Hello world";
+    ASSERT_EQ(foo.str, "Hello world");
+    //foo.cstr = "Hello world";
+
     foo.opt_str = "Hello world";
     ASSERT_EQ(foo.opt_str.get().value(), "Hello world");
 
-    auto pFoo = std::make_unique<Foo>(refVal);
-    auto pFooPtrVal = pFoo.get();
-    foo.smart_ptr = std::move(pFoo);
-    ASSERT_EQ(foo.smart_ptr.get().get(), pFooPtrVal);
-
     // Other member assignment
-    auto foo2 = Foo{refVal};
-    foo2.ref = foo.ref;
-    ASSERT_EQ(foo2.ref, 100);
-    foo2.ref = foo.cref;
-    ASSERT_EQ(foo2.ref, 100);
+    auto foo2 = Foo{testVal};
 
-    foo2.ptr = foo.ptr;
-    ASSERT_EQ(*foo2.ptr, 100);
+    foo.ref = foo2.ref;
+    ASSERT_EQ(foo.ref, 100);
+    foo.ptr = foo2.ptr;
+    ASSERT_EQ(*foo.ptr, 100);
+    foo.cptr = foo2.cptr;
+    ASSERT_EQ(*foo.cptr, 100);
+    //foo.ptr_const = foo2.ptr_const;
+    //foo.cptr_const = foo2.cptr_const;
 
-    foo2.cptr = foo.cptr;
-    ASSERT_EQ(*foo2.cptr, 100);
+    foo.num = foo2.num;
+    ASSERT_EQ(foo.num, 42);
+    //foo.num_const = foo2.num_const;
 
-    foo2.num = foo.num;
-    ASSERT_EQ(foo2.num, 100);
-    foo2.opt_str = foo.opt_str;
-    ASSERT_EQ(foo2.opt_str.get().value(), "Hello world");
+    foo.smart_ptr = std::move(foo2.smart_ptr);
+    ASSERT_EQ(foo.smart_ptr->val, 777);
+    foo.smart_ptr_const = std::move(foo2.smart_ptr_const);
+
+    foo.csmart_ptr = std::move(foo2.csmart_ptr);
+    ASSERT_EQ(foo.csmart_ptr->val, 777);
+    //foo.csmart_ptr_const = std::move(foo.csmart_ptr_const);
+
+    foo.str = foo2.str;
+    ASSERT_EQ(foo.str, "");
+    //foo.cstr = foo2.cstr;
+
+    foo.opt_str = foo2.opt_str;
+    ASSERT_FALSE(foo.opt_str.get().has_value());
 }
 
 TEST(Member, Dereference)
@@ -171,8 +213,8 @@ TEST(Member, Dereference)
         ASSERT_EQ(*foo.ptr, 100);
         foo.opt_str = "Hello world";
         ASSERT_EQ(*foo.opt_str, "Hello world");
-        foo.smart_ptr = std::make_unique<Foo>(refVal);
-        ASSERT_EQ((*foo.smart_ptr).num, 42);
+        foo.smart_ptr = std::make_unique<Bar>();
+        ASSERT_EQ((*foo.smart_ptr).val, 777);
     }
     {
         const auto foo = Foo{refVal};
@@ -190,8 +232,8 @@ TEST(Member, MemberAccess)
         ASSERT_TRUE(foo.opt_str);
         ASSERT_EQ(foo.opt_str->size(), 11);
 
-        foo.smart_ptr = std::make_unique<Foo>(refVal);
-        ASSERT_EQ(foo.smart_ptr->num, 42);
+        foo.smart_ptr = std::make_unique<Bar>();
+        ASSERT_EQ(foo.smart_ptr->val, 777);
 
         ASSERT_EQ(foo.csmart_ptr->val, 777);
 
@@ -371,6 +413,49 @@ TEST(Member, Comparison)
     ASSERT_TRUE(foo.cstr == "Hello moon");
 }
 
+TEST(Member, NoConstPropagation)
+{
+    int refVal = 42;
+    const auto foo = Foo{refVal};
+
+    foo.ref = 100;
+    ASSERT_EQ(refVal, 100);
+    *foo.ptr = 101;
+    ASSERT_EQ(refVal, 101);
+    *foo.ptr_const = 102;
+    ASSERT_EQ(refVal, 102);
+    //foo.ptr = &testVal;
+    //foo.cptr = &testVal;
+    //foo.ptr_const = &testVal;
+    //foo.cptr_const = &testVal;
+
+    //foo.num = 100;
+    //foo.num_const = 100;
+
+    auto pBar = std::make_unique<Bar>();
+    pBar->val = 999;
+
+    *foo.smart_ptr = *pBar;
+    ASSERT_EQ(foo.smart_ptr->val, 999);
+
+    foo.smart_ptr->val = 100;
+    ASSERT_EQ(foo.smart_ptr->val, 100);
+
+    *foo.smart_ptr_const = *pBar;
+    ASSERT_EQ(foo.smart_ptr_const->val, 999);
+
+    foo.smart_ptr_const->val = 100;
+    ASSERT_EQ(foo.smart_ptr_const->val, 100);
+
+    //foo.smart_ptr = std::move(pBar);
+    //foo.smart_ptr_const = std::make_unique<Bar>();
+    //foo.csmart_ptr = std::make_unique<Bar>();
+    //foo.csmart_ptr_const = std::make_unique<Bar>();
+    //foo.str = "Hello world";
+    //foo.cstr = "Hello world";
+    //foo.opt_str = "Hello world";
+}
+
 TEST(Member, Constexpr)
 {
     struct T {
@@ -379,3 +464,5 @@ TEST(Member, Constexpr)
     constexpr auto t = T{};
     static_assert(t.func_ptr() == 777);
 }
+
+} //namespace

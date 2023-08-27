@@ -89,6 +89,23 @@ struct is_dereferencable<T, std::void_t<decltype(*std::declval<T>())>> : std::tr
 template<typename T>
 inline constexpr auto is_dereferencable_v = is_dereferencable<T>::value;
 
+namespace detail {
+
+template<typename, typename = void>
+struct has_get_ptr_method : std::false_type {};
+
+template<typename T>
+struct has_get_ptr_method<T, std::void_t<decltype(std::declval<T>().get())>>
+    : std::is_pointer<decltype(std::declval<T>().get())>::type {};
+
+template<typename T>
+inline constexpr auto has_get_ptr_method_v = has_get_ptr_method<T>::value;
+
+} //namespace detail
+
+template<typename T>
+inline constexpr auto is_smart_pointer_v = is_dereferencable_v<T> && detail::has_get_ptr_method_v<T>;
+
 template<class T, class U, class = void>
 struct is_explicitly_convertible : std::false_type {};
 
