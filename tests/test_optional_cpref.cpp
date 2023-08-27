@@ -8,7 +8,7 @@
 
 namespace {
 
-std::string toString(sfun::optional_ref<int> num)
+std::string toString(sfun::optional_cpref<int> num)
 {
     if (!num.has_value())
         return "empty";
@@ -19,7 +19,7 @@ template<int Num>
 constexpr int testConstexprOptRef()
 {
     auto num = Num;
-    auto oNum = sfun::optional_ref<const int>{num};
+    auto oNum = sfun::optional_cpref<const int>{num};
     return oNum.value();
 }
 
@@ -34,17 +34,17 @@ struct Foo {
 };
 
 struct TestObject {
-    sfun::member<sfun::optional_ref<int>> oRef;
+    sfun::member<sfun::optional_cpref<int>> oRef;
 };
 
 struct FooObject {
-    sfun::member<sfun::optional_ref<Foo>> oRef;
+    sfun::member<sfun::optional_cpref<Foo>> oRef;
 };
 
-TEST(OptionalRef, Constructor)
+TEST(OptionalConstPropagatedRef, Constructor)
 {
     auto foo = 42;
-    auto oRef = sfun::optional_ref<int>{foo};
+    auto oRef = sfun::optional_cpref<int>{foo};
     ASSERT_TRUE(oRef.has_value());
     ASSERT_EQ(oRef.value(), 42);
 
@@ -55,10 +55,10 @@ TEST(OptionalRef, Constructor)
     ASSERT_EQ(foo, 7);
 }
 
-TEST(OptionalRef, PointerConstructor)
+TEST(OptionalConstPropagatedRef, PointerConstructor)
 {
     auto foo = 42;
-    auto oRef = sfun::optional_ref<int>{&foo};
+    auto oRef = sfun::optional_cpref<int>{&foo};
     ASSERT_TRUE(oRef.has_value());
     ASSERT_EQ(oRef.value(), 42);
 
@@ -69,16 +69,16 @@ TEST(OptionalRef, PointerConstructor)
     ASSERT_EQ(foo, 7);
 }
 
-TEST(OptionalRef, NulloptConstructor)
+TEST(OptionalConstPropagatedRef, NulloptConstructor)
 {
-    auto oRef = sfun::optional_ref<int>{std::nullopt};
+    auto oRef = sfun::optional_cpref<int>{std::nullopt};
     ASSERT_FALSE(oRef.has_value());
 }
 
-TEST(OptionalRef, CopyConstructor)
+TEST(OptionalConstPropagatedRef, CopyConstructor)
 {
     auto foo = 42;
-    auto oRef = sfun::optional_ref<int>{foo};
+    auto oRef = sfun::optional_cpref<int>{foo};
     auto oRef2 = oRef;
     ASSERT_TRUE(oRef2.has_value());
     ASSERT_EQ(oRef2.value(), 42);
@@ -90,10 +90,10 @@ TEST(OptionalRef, CopyConstructor)
     ASSERT_EQ(foo, 7);
 }
 
-TEST(OptionalRef, MoveConstructor)
+TEST(OptionalConstPropagatedRef, MoveConstructor)
 {
     auto foo = 42;
-    auto oRef = sfun::optional_ref<int>{foo};
+    auto oRef = sfun::optional_cpref<int>{foo};
     auto oRef2 = std::move(oRef);
     ASSERT_TRUE(oRef2.has_value());
     ASSERT_EQ(oRef2.value(), 42);
@@ -105,11 +105,11 @@ TEST(OptionalRef, MoveConstructor)
     ASSERT_EQ(foo, 7);
 }
 
-TEST(OptionalRef, Emplace)
+TEST(OptionalConstPropagatedRef, Emplace)
 {
     auto foo = 42;
     auto bar = 99;
-    auto oRef = sfun::optional_ref<int>{};
+    auto oRef = sfun::optional_cpref<int>{};
     ASSERT_FALSE(oRef.has_value());
 
     oRef.emplace(foo);
@@ -126,11 +126,11 @@ TEST(OptionalRef, Emplace)
     ASSERT_EQ(oRef.value(), 99);
 }
 
-TEST(OptionalRef, EmplacePointer)
+TEST(OptionalConstPropagatedRef, EmplacePointer)
 {
     auto foo = 42;
     auto bar = 99;
-    auto oRef = sfun::optional_ref<int>{};
+    auto oRef = sfun::optional_cpref<int>{};
     ASSERT_FALSE(oRef.has_value());
 
     oRef.emplace(&foo);
@@ -147,18 +147,18 @@ TEST(OptionalRef, EmplacePointer)
     ASSERT_EQ(oRef.value(), 99);
 }
 
-TEST(OptionalRef, MemberAccess)
+TEST(OptionalConstPropagatedRef, MemberAccess)
 {
     auto foo = Foo{};
-    auto oRef = sfun::optional_ref<Foo>{foo};
+    auto oRef = sfun::optional_cpref<Foo>{foo};
     ASSERT_TRUE(oRef.has_value());
     ASSERT_EQ(oRef->num, 42);
 }
 
-TEST(OptionalRef, Const)
+TEST(OptionalConstPropagatedRef, Const)
 {
     auto foo = 42;
-    auto oRef = sfun::optional_ref<const int>{foo};
+    auto oRef = sfun::optional_cpref<const int>{foo};
     ASSERT_TRUE(oRef.has_value());
     ASSERT_EQ(oRef.value(), 42);
 
@@ -166,7 +166,7 @@ TEST(OptionalRef, Const)
     ASSERT_EQ(oRef2.value(), 42);
 }
 
-TEST(OptionalRef, AsFunctionArg)
+TEST(OptionalConstPropagatedRef, AsFunctionArg)
 {
     ASSERT_EQ("empty", toString({}));
     ASSERT_EQ("empty", toString(std::nullopt));
@@ -174,14 +174,14 @@ TEST(OptionalRef, AsFunctionArg)
     ASSERT_EQ("42", toString(num));
 }
 
-TEST(OptionalRefWrapper, InVector)
+TEST(OptionalConstPropagatedRefWrapper, InVector)
 {
 
-    auto vec = std::vector<sfun::optional_ref_wrapper<int>>{};
+    auto vec = std::vector<sfun::optional_cpref_wrapper<int>>{};
     auto foo = 42;
     auto bar = 99;
-    auto oRefFoo = sfun::optional_ref<int>{foo};
-    auto oRefBar = sfun::optional_ref<int>{bar};
+    auto oRefFoo = sfun::optional_cpref<int>{foo};
+    auto oRefBar = sfun::optional_cpref<int>{bar};
 
     vec.insert(vec.begin(), oRefFoo);
     vec.insert(vec.end(), oRefBar);
@@ -190,13 +190,13 @@ TEST(OptionalRefWrapper, InVector)
     ASSERT_EQ(vec.at(1).get().value(), 99);
 }
 
-TEST(OptionalRefWrapper, InVectorWithConstRef)
+TEST(OptionalConstPropagatedRefWrapper, InVectorWithConstRef)
 {
-    auto vec = std::vector<sfun::optional_ref_wrapper<const int>>{};
+    auto vec = std::vector<sfun::optional_cpref_wrapper<const int>>{};
     auto foo = 42;
     auto bar = 99;
-    const auto oRefFoo = sfun::optional_ref<const int>{foo};
-    const auto oRefBar = sfun::optional_ref<const int>{bar};
+    const auto oRefFoo = sfun::optional_cpref<const int>{foo};
+    const auto oRefBar = sfun::optional_cpref<const int>{bar};
 
     vec.insert(vec.begin(), oRefFoo);
     vec.insert(vec.end(), oRefBar);
@@ -205,7 +205,7 @@ TEST(OptionalRefWrapper, InVectorWithConstRef)
     ASSERT_EQ(vec.at(1).get().value(), 99);
 }
 
-TEST(OptionalRefMember, Modify)
+TEST(OptionalConstPropagatedRefMember, Modify)
 {
     auto foo = 42;
     auto obj = TestObject{foo};
@@ -230,7 +230,7 @@ TEST(OptionalRefMember, Modify)
     ASSERT_EQ(obj2.oRef.get().value(), 7);
 }
 
-TEST(OptionalRefMember, Dereference)
+TEST(OptionalConstPropagatedRefMember, Dereference)
 {
     auto foo = 42;
     auto obj = TestObject{foo};
@@ -244,7 +244,7 @@ TEST(OptionalRefMember, Dereference)
     ASSERT_EQ(foo, 7);
 }
 
-TEST(OptionalRefMember, ConstDereference)
+TEST(OptionalConstPropagatedRefMember, ConstDereference)
 {
     auto foo = 42;
     const auto obj = TestObject{foo};
@@ -254,11 +254,11 @@ TEST(OptionalRefMember, ConstDereference)
     foo = 99;
     ASSERT_EQ(*obj.oRef, 99);
 
-    *obj.oRef = 7;
-    ASSERT_EQ(foo, 7);
+    //*obj.oRef = 7;
+    //ASSERT_EQ(foo, 7);
 }
 
-TEST(OptionalRefMember, MemberAccess)
+TEST(OptionalConstPropagatedRefMember, MemberAccess)
 {
     auto foo = Foo{};
     auto obj = FooObject{foo};
@@ -273,7 +273,7 @@ TEST(OptionalRefMember, MemberAccess)
     ASSERT_EQ(foo.num, 7);
 }
 
-TEST(OptionalRefMember, ConstMemberAccess)
+TEST(OptionalConstPropagatedRefMember, ConstMemberAccess)
 {
     auto foo = Foo{};
     const auto obj = FooObject{foo};
@@ -284,11 +284,11 @@ TEST(OptionalRefMember, ConstMemberAccess)
     foo.num = 99;
     ASSERT_EQ(obj.oRef->num, 99);
 
-    obj.oRef->num = 7;
-    ASSERT_EQ(foo.num, 7);
+    //obj.oRef->num = 7;
+    //ASSERT_EQ(foo.num, 7);
 }
 
-TEST(OptionalRef, Constexpr)
+TEST(OptionalConstPropagatedRef, Constexpr)
 {
     ASSERT_EQ("42", toString<testConstexprOptRef<42>()>());
 }
