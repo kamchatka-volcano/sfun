@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
-project(sfun VERSION 5.0.0 DESCRIPTION "stuff from unnamed namespace - a c++17 helper library")
-include(GNUInstallDirs)
+project(sfun VERSION 5.1.0 DESCRIPTION "stuff from unnamed namespace - a c++17 helper library")
 include(external/seal_lake)
 
 SealLake_Bundle(
@@ -19,5 +18,5 @@ SealLake_Bundle(
 SealLake_HeaderOnlyLibrary(
         COMPILE_FEATURES cxx_std_17
 )
-SealLake_OptionalBuildSteps(tests)
+SealLake_OptionalSubProjects(tests)
 
