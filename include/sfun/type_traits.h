@@ -115,6 +115,15 @@ struct is_explicitly_convertible<T, U, std::void_t<decltype(static_cast<U>(std::
 template<class T, class U>
 inline constexpr auto is_explicitly_convertible_v = is_explicitly_convertible<T, U>::value;
 
+template<typename, typename = void>
+struct is_complete_type : std::false_type {};
+
+template<typename T>
+struct is_complete_type<T, std::void_t<decltype(sizeof(T))>> : std::true_type {};
+
+template<typename T>
+inline constexpr auto is_complete_type_v = is_complete_type<T>::value;
+
 template<typename T>
 struct type_identity {
     using type = T;
