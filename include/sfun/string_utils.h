@@ -174,17 +174,18 @@ inline std::vector<std::string> split(std::string&& str, std::string_view delim 
     return stringList;
 }
 
-inline std::string replace(std::string str, std::string_view subStr, std::string_view val)
+inline std::string replace(std::string_view str, std::string_view subStr, std::string_view val)
 {
+    auto inputStr = std::string{str};
     if (subStr.empty())
-        return str;
+        return inputStr;
 
-    auto pos = str.find(subStr);
+    auto pos = inputStr.find(subStr);
     while (pos != std::string::npos) {
-        str.replace(pos, subStr.size(), val);
-        pos = str.find(subStr, pos + val.size());
+        inputStr.replace(pos, subStr.size(), val);
+        pos = inputStr.find(subStr, pos + val.size());
     }
-    return str;
+    return inputStr;
 }
 
 template<typename TRange>
