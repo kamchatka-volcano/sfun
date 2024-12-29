@@ -28,7 +28,7 @@ public:
             std::enable_if_t<!std::is_same_v<std::decay_t<TVal>, optional_ref<TCheck, constPropagationMode>>>* =
                     nullptr>
     constexpr optional_ref(TVal& val) noexcept
-        : value_{std::addressof(val)}
+        : value_{&val}
     {
     }
 
@@ -47,7 +47,7 @@ public:
     template<typename TVal>
     constexpr void emplace(TVal& val) noexcept
     {
-        value_ = std::addressof(val);
+        value_ = &val;
     }
 
     template<typename TVal>
